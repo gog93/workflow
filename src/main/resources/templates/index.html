@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tables Example</title>
+</head>
+<body>
+<h2>Table 1</h2>
+<table id="table1">
+    <thead>
+    <tr>
+        <th>Column 1</th>
+        <th>Column 2</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>Value 1</td>
+        <td>Value 2</td>
+        <td>
+            <button class="add-row-btn" data-row="1">Add Row to Table 2</button>
+        </td>
+    </tr>
+    <tr>
+        <td>Value 3</td>
+        <td>Value 4</td>
+        <td>
+            <button class="add-row-btn" data-row="2">Add Row to Table 2</button>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<h2>Table 2</h2>
+<table id="table2">
+    <thead>
+    <tr>
+        <th>Column 1</th>
+        <th>Column 2</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>Value 2</td>
+        <td>Value 3</td>
+        <td>
+            <button class="remove-row-btn">Remove Row</button>
+        </td>
+    </tr>
+    <tr>
+        <td>Value 4</td>
+        <td>Value 5</td>
+        <td>
+            <button class="remove-row-btn">Remove Row</button>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<script>
+  const addRowBtns = document.querySelectorAll('.add-row-btn');
+  const removeRowBtns = document.querySelectorAll('.remove-row-btn');
+
+  addRowBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const rowId = btn.getAttribute('data-row');
+      const table2 = document.getElementById('table2');
+      const table1Row = btn.parentNode.parentNode;
+      const newRow = document.createElement('tr');
+      newRow.innerHTML = `
+        <td>${table1Row.cells[0].innerText}</td>
+        <td>${table1Row.cells[1].innerText}</td>
+        <td>
+          <button class="remove-row-btn">Remove Row</button>
+        </td>
+      `;
+      table2.querySelector('tbody').appendChild(newRow);
+
+      // Add event listener to the new remove button
+      const newRemoveBtn = newRow.querySelector('.remove-row-btn');
+      newRemoveBtn.addEventListener('click', () => {
+        const table1 = document.getElementById('table1');
+        const table2Row = newRemoveBtn.parentNode.parentNode;
+        const newRow = document.createElement('tr');
+        newRow.innerHTML = `
+          <td>${table2Row.cells[0].innerText}</td>
+          <td>${table2Row.cells[1].innerText}</td>
+          <td>
+            <button class="add-row-btn" data-row="${table1.rows.length}">Add Row to Table 2</button>
+          </td>
+        `;
+        table1.querySelector('tbody').appendChild(newRow);
+        table2Row.remove();
+      });
+    });
+  });
+
+  removeRowBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const table1 = document.getElementById('table1');
+      const table2Row = btn.parentNode.parentNode;
+      const newRow = document.createElement('tr');
+      newRow.innerHTML = `
+        <td>${table2Row.cells[0].innerText}</td>
+        <td>${table2Row.cells[1].innerText}</td>
+        <td>
+          <button class="add-row-btn" data-row="${table1.rows.length}">Add Row to Table 2</button>
+        </td>
+      `;
+      table1.querySelector('tbody').appendChild(newRow);
+      table2Row.remove();
+    });
+  });
+
+</script>
+
+</body>
+</html>
